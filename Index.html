@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Code Share</title>
+  <!-- Bootstrap 5 CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    body {
+      background-color: #f7f7f7;
+      font-family: Arial, sans-serif;
+    }
+
+    .card {
+      border-radius: 10px;
+    }
+
+    #sharedCodeContainer {
+      display: none;
+    }
+
+    textarea {
+      resize: none;
+      font-family: monospace;
+      background-color: #f4f4f4;
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="container mt-5">
+    <h1 class="text-center">Share Your Code</h1>
+
+    <!-- Code input form -->
+    <div class="card">
+      <div class="card-body">
+        <form id="codeForm">
+          <div class="mb-3">
+            <textarea class="form-control" id="codeInput" rows="10" placeholder="Paste your code here..."></textarea>
+          </div>
+          <button type="submit" class="btn btn-primary w-100">Share Code</button>
+        </form>
+      </div>
+    </div>
+
+    <!-- Displaying shared code -->
+    <div class="mt-4" id="sharedCodeContainer" style="display: none;">
+      <h3 class="text-center">Your Shared Code</h3>
+      <pre><code id="sharedCode" class="p-3 bg-light border rounded"></code></pre>
+      <button class="btn btn-secondary w-100 mt-3" onclick="resetPage()">Share Another Code</button>
+    </div>
+  </div>
+
+  <!-- Bootstrap 5 JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+
+  <script>
+    // Check if there's code in localStorage on page load
+    window.onload = function () {
+      const savedCode = localStorage.getItem('sharedCode');
+      if (savedCode) {
+        document.getElementById('sharedCode').textContent = savedCode;
+        document.getElementById("sharedCodeContainer").style.display = "block";
+        document.getElementById("codeForm").style.display = "none";
+      }
+    };
+
+    // Form submission event handler
+    document.getElementById("codeForm").addEventListener("submit", function (e) {
+      e.preventDefault();
+
+      // Get code from textarea
+      const codeInput = document.getElementById("codeInput").value;
+
+      if (codeInput.trim()) {
+        // Save the code to localStorage
+        localStorage.setItem('sharedCode', codeInput);
+
+        // Show shared code view and hide the form
+        document.getElementById("sharedCodeContainer").style.display = "block";
+        document.getElementById("codeInput").value = "";  // Clear textarea
+        document.getElementById("codeForm").style.display = "none";
+
+        // Insert code into the display area
+        document.getElementById("sharedCode").textContent = codeInput;
+      }
+    });
+
+    // Reset the page when sharing another code
+    function resetPage() {
+      // Clear the shared code from localStorage and reset the page
+      localStorage.removeItem('sharedCode');
+      document.getElementById("sharedCodeContainer").style.display = "none";
+      document.getElementById("codeForm").style.display = "block";
+    }
+  </script>
+
+</body>
+
+</html>
